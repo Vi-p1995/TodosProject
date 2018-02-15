@@ -14,11 +14,21 @@ var auth = function(req,res,next){
 
 router.put('/todo/setCompleted/:id',auth,function(req,res){
   id=req.params.id;
-  res.json(lib.setCompleted(id));
+  message=lib.setCompleted(id);
+  if(message.status===400){
+    res.status(400).json(message.message);
+  }else{
+    res.json(message.message);
+  }
 });
 
 router.get('/showUncompletedTodos',auth,function(req,res){
-  res.json(lib.showUncompletedTodos());
+  message=lib.showUncompletedTodos();
+  if(message.status===400){
+    res.status(400).json(message.message);
+  }else{
+    res.json(message);
+  }
 });
 
 module.exports=router;

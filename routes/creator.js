@@ -16,12 +16,22 @@ router.post('/todo',auth,function(req,res){
   idCreatore=req.body.idCreatore;
   idAssegnatario=req.body.idAssegnatario;
   azioneDaSvolgere=req.body.azioneDaSvolgere;
-  res.json(lib.add(idCreatore,idAssegnatario,azioneDaSvolgere));
+  message=lib.add(idCreatore,idAssegnatario,azioneDaSvolgere);
+  if(message.status===400){
+    res.status(400).json(message.message);
+  }else{
+    res.json(message.message);
+  }
 });
 
 router.delete('/todo/:id',auth,function(req,res){
   id=parseInt(req.params.id);
-  res.json(lib.del(id));
+  message=lib.del(id);
+  if(message.status===400){
+    res.status(400).json(message.message);
+  }else{
+    res.json(message.message);
+  }
 });
 
 router.get('/todos',function(req,res){
@@ -30,9 +40,19 @@ router.get('/todos',function(req,res){
 
 router.get('/todos/:id',auth,function(req,res){
   if(req.query.user==="creator"){
-    res.json(lib.showTodosCreator(req.params.id));
+    message=lib.showTodosCreator(req.params.id);
+    if(message.status===400){
+      res.status(400).json(message.message);
+    }else{
+      res.json(message);
+    }
   }else if(req.query.user==="assignee"){
-    res.json(lib.showTodosAssignee(req.params.id));
+    message=lib.showTodosAssignee(req.params.id);
+    if(message.status===400){
+      res.status(400).json(message.message);
+    }else{
+      res.json(message);
+    }
   }else{
     res.status(401).json({message:"page not found"});
   }
@@ -40,14 +60,29 @@ router.get('/todos/:id',auth,function(req,res){
 
 router.put('/todo/setUncompleted/:id',auth,function(req,res){
   id=req.params.id;
-  res.json(lib.setUncompleted(id));
+  message=lib.setUncompleted(id);
+  if(message.status===400){
+    res.status(400).json(message.message);
+  }else{
+    res.json(message.message);
+  }
 });
 
 router.get('/showTodos',auth,function(req,res){
   if(req.query.what==="completed"){
-    res.json(lib.showCompletedTodos());
+    message=lib.showCompletedTodos();
+    if(message.status===400){
+      res.status(400).json(message.message);
+    }else{
+      res.json(message);
+    }
   }else if (req.query.what==="unCompleted"){
-    res.json(lib.showUncompletedTodos());
+    message=lib.showUncompletedTodos();
+    if(message.status===400){
+      res.status(400).json(message.message);
+    }else{
+      res.json(message);
+    }
   }else{
     res.status(401).json({message:"page not found"});
   }
